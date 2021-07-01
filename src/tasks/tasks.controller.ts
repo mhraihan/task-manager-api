@@ -29,13 +29,13 @@ export class TasksController {
     return this.tasksService.createTask(CreateTaskDto);
   }
 
-  // @Patch('/:id/update')
-  // updateTask(
-  //   @Param('id') id: string,
-  //   @Body() UpdateTaskDto: UpdateTaskDto,
-  // ): Task {
-  //   return this.tasksService.updateTask(id, UpdateTaskDto);
-  // }
+  @Patch('/:id/update')
+  updateTask(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ): Promise<Task> {
+    return this.tasksService.updateTask(id, updateTaskDto);
+  }
 
   @Patch('/:id/status')
   updateTaskStatus(
