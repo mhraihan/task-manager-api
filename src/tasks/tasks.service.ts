@@ -10,15 +10,19 @@ import { User } from 'src/auth/entities/user.entity';
 @Injectable()
 export class TasksService {
   constructor(
-    @InjectRepository(TasksRepository)
-    private tasksRepository: TasksRepository,
+    @InjectRepository(TasksRepository) private tasksRepository: TasksRepository,
   ) {}
   getTasks(filterDto: GetTasksFilter, user: User): Promise<Task[]> {
     return this.tasksRepository.getTasks(filterDto, user);
   }
 
   async getTask(id: string, user: User): Promise<Task> {
-    const found = await this.tasksRepository.findOne({ where: { id, user } });
+    const found = await this.tasksRepository.findOne({
+      where: {
+        id,
+        user,
+      },
+    });
     if (!found) {
       throw new NotFoundException(`Task with id ${id} not found`);
     }
@@ -34,7 +38,10 @@ export class TasksService {
     user: User,
   ): Promise<Task> {
     let task = await this.getTask(id, user);
-    task = { ...task, ...updateTaskDto };
+    task = {
+      ...task,
+      ...updateTaskDto,
+    };
     await this.tasksRepository.save(task);
     return task;
   }
@@ -49,7 +56,10 @@ export class TasksService {
     return task;
   }
   async deleteTask(id: string, user: User): Promise<void> {
-    const result = await this.tasksRepository.delete({ id, user });
+    const result = await this.tasksRepository.delete({
+      id,
+      user,
+    });
     if (!result.affected) {
       throw new NotFoundException(`Task with id ${id} not found`);
     }
